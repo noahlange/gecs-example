@@ -1,16 +1,23 @@
 import type { Context, QueryType } from 'gecs';
-import type { ContextState } from '../context';
-
+import type { ContextType } from '../../../circles';
+import { Circle, Intersecting } from '../components';
 import { drawLine, fillCircle } from '../utils';
-import { Circle, Intersecting } from '../ecs';
+
+enum Colors {
+  WHITE = '#ffffff',
+  BLACK = '#000000',
+  YELLOW = '#ffff99',
+  WHITE_TRANS = '#ffffff33'
+}
 
 let $: { circles: QueryType<[typeof Circle, typeof Intersecting]> };
 
-export function RenderSystem(ctx: Context<ContextState>) {
+export function RenderSystem(ctx: Context<ContextType>) {
   $ ??= { circles: ctx.$.components(Circle, Intersecting) };
 
-  const { ctx: draw, ...state } = ctx.state;
+  const { ctx: draw, ...state } = ctx.game.circle.state;
 
+  // resize canvas if the window size's changed
   if (
     state.width !== state.canvas.width ||
     state.height !== state.canvas.height
@@ -19,7 +26,7 @@ export function RenderSystem(ctx: Context<ContextState>) {
     state.canvas.height = state.height;
   }
 
-  draw.fillStyle = 'black';
+  draw.fillStyle = Colors.BLACK;
   draw.fillRect(0, 0, state.width, state.height);
 
   for (const entity of $.circles) {
@@ -36,17 +43,17 @@ export function RenderSystem(ctx: Context<ContextState>) {
     );
 
     draw.lineWidth = 1;
-    draw.strokeStyle = '#fff';
+    draw.strokeStyle = Colors.WHITE;
     draw.stroke();
 
     for (const [a, b] of intersect.points) {
       draw.lineWidth = 2;
-      draw.strokeStyle = '#ff9';
-      draw.fillStyle = 'rgba(255, 255,255, 0.2)';
+      draw.strokeStyle = Colors.YELLOW;
+      draw.fillStyle = Colors.WHITE_TRANS;
       fillCircle(draw, a, 8);
       fillCircle(draw, b, 8);
 
-      draw.fillStyle = '#fff';
+      draw.fillStyle = Colors.WHITE;
       fillCircle(draw, a, 3);
       fillCircle(draw, b, 3);
 
