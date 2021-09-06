@@ -6,7 +6,7 @@ import { RenderSystem } from './systems/render';
 
 import { Circle, Intersecting, Movement } from './components';
 import { CircleEntity } from './entities';
-import type { ContextType } from '../../circles';
+import type { ContextType } from '../circles';
 import { random } from '../../utils';
 
 export interface ContextState {
@@ -29,6 +29,11 @@ export class CirclePlugin extends Plugin<ContextType> {
     speed: 0.0025
   };
 
+  public query = {
+    circles: this.ctx.query.components(Circle, Intersecting),
+    movers: this.ctx.query.components(Circle, Movement)
+  };
+
   public $: PluginData<ContextType> = {
     components: [Circle, Intersecting, Movement],
     entities: [CircleEntity],
@@ -43,17 +48,11 @@ export class CirclePlugin extends Plugin<ContextType> {
     for (let i = 0; i < 30; i++) {
       this.ctx.create(CircleEntity, {
         circle: {
-          position: {
-            x: random(0, this.state.width),
-            y: random(0, this.state.height)
-          },
+          position: [random(0, this.state.width), random(0, this.state.height)],
           radius: random(20, 100)
         },
         movement: {
-          velocity: {
-            x: random(-20, 20),
-            y: random(-20, 20)
-          }
+          velocity: [random(-20, 20), random(-20, 20)]
         }
       });
     }

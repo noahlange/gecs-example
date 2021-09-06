@@ -6,8 +6,10 @@ export function intersection(
   circleB: Circle
 ): null | [Vector2, Vector2] {
   // dx and dy are the vertical and horizontal distances between the circle centers.
-  const dx = circleB.position.x - circleA.position.x;
-  const dy = circleB.position.y - circleA.position.y;
+  const [ax, ay] = circleA.position;
+  const [bx, by] = circleB.position;
+  const dx = bx - ax;
+  const dy = by - ay;
 
   // Distance between the centers
   const d = Math.sqrt(dy * dy + dx * dx);
@@ -33,8 +35,8 @@ export function intersection(
     (2.0 * d);
 
   /* Determine the coordinates of point 2. */
-  const x2 = circleA.position.x + (dx * a) / d;
-  const y2 = circleA.position.y + (dy * a) / d;
+  const x2 = ax + (dx * a) / d;
+  const y2 = ay + (dy * a) / d;
 
   /* Determine the distance from point 2 to either of the
    * intersection points.
@@ -49,28 +51,28 @@ export function intersection(
 
   /* Determine the absolute intersection points. */
   return [
-    { x: x2 + rx, y: y2 + ry },
-    { x: x2 - rx, y: y2 - ry }
+    [x2 + rx, y2 + ry],
+    [x2 - rx, y2 - ry]
   ];
 }
 
 export function fillCircle(
   ctx: CanvasRenderingContext2D,
-  point: Vector2,
+  [x, y]: Vector2,
   radius: number
 ) {
   ctx.beginPath();
-  ctx.arc(point.x, point.y, radius, 0, Math.PI * 2, false);
+  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
   ctx.fill();
 }
 
 export function drawLine(
   ctx: CanvasRenderingContext2D,
-  a: Vector2,
-  b: Vector2
+  [ax, ay]: Vector2,
+  [bx, by]: Vector2
 ) {
   ctx.beginPath();
-  ctx.moveTo(a.x, a.y);
-  ctx.lineTo(b.x, b.y);
+  ctx.moveTo(ax, ay);
+  ctx.lineTo(bx, by);
   ctx.stroke();
 }

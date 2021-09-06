@@ -3,8 +3,8 @@
  * https://github.com/ecsyjs/ecsy/blob/master/site/examples/canvas/index.html
  */
 import { Context } from 'gecs';
-
-import { StatsPlugin, CirclePlugin, TickerPlugin } from './plugins';
+import { StatsPlugin, TickerPlugin } from '../../plugins';
+import { CirclePlugin } from './plugin';
 
 export interface ContextType {
   circle: CirclePlugin;
@@ -14,6 +14,7 @@ export interface ContextType {
 const Example = Context.with(StatsPlugin, CirclePlugin, TickerPlugin);
 
 const context = new Example();
+
 context.start().then(() => {
-  context.game.ticker.tick();
+  context.$.ticker.tick();
 });

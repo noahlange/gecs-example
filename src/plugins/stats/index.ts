@@ -2,6 +2,7 @@ import Stats from 'stats.js';
 import { Phase, phase, Plugin } from 'gecs';
 import { round } from '../../utils';
 
+// every `n`, ticks, print the average tick duration in ms
 const TICKS = 100;
 
 interface Durations {
@@ -19,19 +20,15 @@ export class StatsPlugin extends Plugin {
         this.stats.begin();
       }),
       phase(Phase.POST_RENDER, () => {
-        // and we're done working, just wrap things up
+        // we're done working, just wrapping things up
         this.stats.end();
-
-        // we're calculating our own dt because the context's is capped at 60 FPS
+        // we're calculating our own duration because the context's tick delta won't fall below 16.6 ms (60 FPS)
         this.ms.ticks.push(performance.now() - this.ts);
-
         if (!(this.ms.ticks.length % TICKS)) {
           const val = round(this.ms.ticks.reduce((a, b) => a + b, 0) / TICKS);
-          this.ms.averages.push(val);
-          this.ms.ticks = [];
+          this.ms.averages.push(val), (this.ms.ticks = []);
           // every 100 ticks, print the average tick duration
           console.log(val);
-
           // but every 1000 ticks, also print the average tick duration since the beginning
           const avgs = this.ms.averages;
           if (!(avgs.length % 10)) {

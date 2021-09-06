@@ -3,13 +3,13 @@ import type { Vector2 } from '../../utils';
 
 export class Movement extends Component {
   public static readonly type = 'movement';
-  public velocity: Vector2 = { x: 0, y: 0 };
-  public acceleration: Vector2 = { x: 0, y: 0 };
+  public velocity: Vector2 = [0, 0];
+  public acceleration: Vector2 = [0, 0];
 }
 
 export class Circle extends Component {
   public static readonly type = 'circle';
-  public position: Vector2 = { x: 0, y: 0 };
+  public position: Vector2 = [0, 0];
   public radius: number = 0;
 }
 

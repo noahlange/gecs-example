@@ -1,17 +1,11 @@
 import type { QueryType, Context } from 'gecs';
-import type { ContextType } from '../../../circles';
-
-import { Circle, Intersecting } from '../components';
+import type { ContextType } from '../../circles';
 
 import { intersection } from '../utils';
 
-let $: { entities: QueryType<[typeof Circle, typeof Intersecting]> };
-
 export function IntersectionSystem(ctx: Context<ContextType>) {
-  $ ??= { entities: ctx.$.components(Circle, Intersecting) };
-
   let index = 1;
-  const entities = Array.from($.entities);
+  const entities = Array.from(ctx.$.circle.query.circles);
   for (const entity of entities) {
     entity.$.intersect.points = [];
     for (let i = index; i < entities.length; i++) {

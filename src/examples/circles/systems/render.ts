@@ -1,6 +1,5 @@
-import type { Context, QueryType } from 'gecs';
-import type { ContextType } from '../../../circles';
-import { Circle, Intersecting } from '../components';
+import type { Context } from 'gecs';
+import type { ContextType } from '../../circles';
 import { drawLine, fillCircle } from '../utils';
 
 enum Colors {
@@ -10,13 +9,8 @@ enum Colors {
   WHITE_TRANS = '#ffffff33'
 }
 
-let $: { circles: QueryType<[typeof Circle, typeof Intersecting]> };
-
 export function RenderSystem(ctx: Context<ContextType>) {
-  $ ??= { circles: ctx.$.components(Circle, Intersecting) };
-
-  const { ctx: draw, ...state } = ctx.game.circle.state;
-
+  const { ctx: draw, ...state } = ctx.$.circle.state;
   // resize canvas if the window size's changed
   if (
     state.width !== state.canvas.width ||
@@ -29,18 +23,12 @@ export function RenderSystem(ctx: Context<ContextType>) {
   draw.fillStyle = Colors.BLACK;
   draw.fillRect(0, 0, state.width, state.height);
 
-  for (const entity of $.circles) {
+  for (const entity of ctx.$.circle.query.circles) {
     const { circle, intersect } = entity.$;
+    const [x, y] = circle.position;
 
     draw.beginPath();
-    draw.arc(
-      circle.position.x,
-      circle.position.y,
-      circle.radius,
-      0,
-      2 * Math.PI,
-      false
-    );
+    draw.arc(x, y, circle.radius, 0, 2 * Math.PI, false);
 
     draw.lineWidth = 1;
     draw.strokeStyle = Colors.WHITE;

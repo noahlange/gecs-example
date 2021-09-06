@@ -13,7 +13,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "gecs": "^1.0.0-alpha.2",
+    "gecs": "github:noahlange/gecs",
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
