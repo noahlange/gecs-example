@@ -1,4 +1,7 @@
-export type Vector2 = [number, number];
+export interface Vector2 {
+  x: number;
+  y: number;
+}
 
 export function round(value: number): number {
   return Math.round(value * 100) / 100;

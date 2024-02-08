@@ -1,6 +1,6 @@
 import type { Context } from 'gecs';
-import type { ContextType } from '../../circles';
 import { drawLine, fillCircle } from '../utils';
+import { PluginType } from '..';
 
 enum Colors {
   WHITE = '#ffffff',
@@ -9,7 +9,7 @@ enum Colors {
   WHITE_TRANS = '#ffffff33'
 }
 
-export function RenderSystem(ctx: Context<ContextType>) {
+export function RenderSystem(ctx: Context<PluginType>) {
   const { ctx: draw, ...state } = ctx.$.circle.state;
   // resize canvas if the window size's changed
   if (
@@ -24,11 +24,10 @@ export function RenderSystem(ctx: Context<ContextType>) {
   draw.fillRect(0, 0, state.width, state.height);
 
   for (const entity of ctx.$.circle.query.circles) {
-    const { circle, intersect } = entity.$;
-    const [x, y] = circle.position;
+    const { position, shape, intersect } = entity.$;
 
     draw.beginPath();
-    draw.arc(x, y, circle.radius, 0, 2 * Math.PI, false);
+    draw.arc(position.x, position.y, shape.radius, 0, 2 * Math.PI, false);
 
     draw.lineWidth = 1;
     draw.strokeStyle = Colors.WHITE;

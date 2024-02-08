@@ -1,23 +1,25 @@
+import { EntityType } from 'gecs';
 import type { Vector2 } from '../../utils';
-import type { Circle } from './components';
+import { Position, Shape } from '../../components';
+
+type CircleEntity = EntityType<[typeof Position, typeof Shape]>;
 
 export function intersection(
-  circleA: Circle,
-  circleB: Circle
+  { $: a }: CircleEntity,
+  { $: b }: CircleEntity
 ): null | [Vector2, Vector2] {
   // dx and dy are the vertical and horizontal distances between the circle centers.
-  const [ax, ay] = circleA.position;
-  const [bx, by] = circleB.position;
-  const dx = bx - ax;
-  const dy = by - ay;
+
+  const dx = b.position.x - a.position.x;
+  const dy = b.position.y - a.position.y;
 
   // Distance between the centers
   const d = Math.sqrt(dy * dy + dx * dx);
 
   // Check for solvability
   if (
-    d > circleA.radius + circleB.radius || // no intersection
-    d < Math.abs(circleA.radius - circleB.radius) // one contained within the other
+    d > a.shape.radius + b.shape.radius || // no intersection
+    d < Math.abs(a.shape.radius - b.shape.radius) // one contained within the other
   ) {
     return null;
   }
@@ -28,20 +30,20 @@ export function intersection(
    */
 
   /* Determine the distance from point 0 to point 2. */
-  const a =
-    (circleA.radius * circleA.radius -
-      circleB.radius * circleB.radius +
+  const idk =
+    (a.shape.radius * a.shape.radius -
+      b.shape.radius * b.shape.radius +
       d * d) /
     (2.0 * d);
 
   /* Determine the coordinates of point 2. */
-  const x2 = ax + (dx * a) / d;
-  const y2 = ay + (dy * a) / d;
+  const x2 = a.position.x + (dx * idk) / d;
+  const y2 = a.position.y + (dy * idk) / d;
 
   /* Determine the distance from point 2 to either of the
    * intersection points.
    */
-  const h = Math.sqrt(circleA.radius * circleA.radius - a * a);
+  const h = Math.sqrt(a.shape.radius * a.shape.radius - idk * idk);
 
   /* Now determine the offsets of the intersection points from
    * point 2.
@@ -51,28 +53,28 @@ export function intersection(
 
   /* Determine the absolute intersection points. */
   return [
-    [x2 + rx, y2 + ry],
-    [x2 - rx, y2 - ry]
+    { x: x2 + rx, y: y2 + ry },
+    { x: x2 - rx, y: y2 - ry }
   ];
 }
 
 export function fillCircle(
   ctx: CanvasRenderingContext2D,
-  [x, y]: Vector2,
+  center: Vector2,
   radius: number
 ) {
   ctx.beginPath();
-  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2, false);
   ctx.fill();
 }
 
 export function drawLine(
   ctx: CanvasRenderingContext2D,
-  [ax, ay]: Vector2,
-  [bx, by]: Vector2
+  a: Vector2,
+  b: Vector2
 ) {
   ctx.beginPath();
-  ctx.moveTo(ax, ay);
-  ctx.lineTo(bx, by);
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
   ctx.stroke();
 }
