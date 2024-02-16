@@ -1,24 +1,35 @@
 {
-  "name": "gecs-example",
+  "name": "@gex/example",
+  "private": true,
   "author": {
     "name": "Noah Lange",
     "email": "noahrlange@gmail.com"
   },
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "version": "0.0.0",
-  "description": "Basic example using gecs.",
+  "description": "Basic examples using gecs.",
   "license": "MIT",
   "scripts": {
     "start": "vite serve",
     "serve": "vite preview",
     "build": "vite build",
-    "dev:types": "tsc --noEmit"
+    "dev:types": "tsc --noEmit",
+    "dev:lint": "eslint --fix './packages/*/src/**/*.ts'",
+    "dev:pretty": "prettier --write 'packages/*/src/**/*.ts'"
   },
   "dependencies": {
-    "gecs": "github:noahlange/gecs",
-    "stats.js": "^0.17.0"
+    "gecs": "github:noahlange/gecs"
   },
   "devDependencies": {
-    "@types/stats.js": "^0.17.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vite": "^2.3.8"
   }

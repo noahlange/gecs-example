@@ -1,0 +1,6 @@
+{
+  "name": "@gecs",
+  "version": "0.0.0",
+  "useWorkspaces": true,
+  "workspaces": ["packages/*"]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@gex/plugin-stats",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Noah Lange <noahrlange@gmail.com>",
+  "homepage": "https://github.com/noahlange/gecs-example#readme",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev:types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/stats.js": "^0.17.0"
+  },
+  "dependencies": {
+    "stats.js": "^0.17.0"
+  }
+}
