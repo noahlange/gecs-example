@@ -2,18 +2,19 @@ import { Shape, ShapeType } from '@gex/plugin-canvas';
 import type { Context } from 'gecs';
 
 export function WorldWrapSystem(ctx: Context<$.Plugins>) {
-  for (const { $ } of ctx.$.physics.query.movers.all.components(Shape)) {
-    let { x, y } = $.position;
+  for (const entity of ctx.$.physics.query.movers) {
+    if (!entity.has(Shape)) continue;
+
+    let { x, y } = entity.$.position;
 
     const r = (() => {
-      switch ($.shape.data.type) {
+      const shape = entity.$.shape.data;
+      switch (shape.type) {
         case ShapeType.CIRCLE: {
-          return $.shape.data.radius;
+          return shape.radius;
         }
         case ShapeType.RECT: {
-          return Math.ceil(
-            Math.max($.shape.data.height, $.shape.data.width) / 2
-          );
+          return Math.ceil(Math.max(shape.height, shape.width) / 2);
         }
       }
     })();
@@ -29,7 +30,7 @@ export function WorldWrapSystem(ctx: Context<$.Plugins>) {
     x = x - r > ctx.$.canvas.width ? -r : x;
 
     // finally, update position
-    $.position.x = x;
-    $.position.y = y;
+    entity.$.position.x = x;
+    entity.$.position.y = y;
   }
 }

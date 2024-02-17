@@ -10,7 +10,7 @@ import { WorldWrapSystem } from '@gex/common';
 import { MovableShape } from './entities';
 import { NUM_ELEMENTS } from './utils';
 
-export class ShapesExample extends Plugin<$.Plugins> {
+export class Shapes extends Plugin<$.Plugins> {
   public static readonly type = 'shapes';
 
   public $: PluginData<$.Plugins> = {

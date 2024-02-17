@@ -1,20 +1,22 @@
 import { Context } from 'gecs';
-import { ShapesExample } from './plugin';
+
 import Canvas from '@gex/plugin-canvas';
 import Stats from '@gex/plugin-stats';
 import Physics from '@gex/plugin-physics';
 import Ticker from '@gex/plugin-ticker';
 
+import { Shapes } from './plugin';
+
 declare global {
   namespace $ {
     interface Plugins {
-      [ShapesExample.type]: ShapesExample;
+      [Shapes.type]: Shapes;
     }
   }
 }
 
 (async () => {
-  const Game = Context.with(Canvas, Stats, Physics, Ticker, ShapesExample);
+  const Game = Context.with(Canvas, Stats, Physics, Ticker, Shapes);
   const game = new Game();
   await game.start();
 })();
